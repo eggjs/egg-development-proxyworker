@@ -23,7 +23,7 @@ module.exports = app => {
 
   app.messenger.on('conn-proxy-worker', data => {
     if (proxyWorker) {
-      logger('[egg:proxyworker] kill agent worker with signal SIGTERM');
+      logger.info('[egg:proxyworker] kill agent worker with signal SIGTERM');
       proxyWorker.send({ command: 'reconn', data });
       return;
     }
