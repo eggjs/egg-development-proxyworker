@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-// const debug = require('debug')('egg-development-proxyworker');
 const childprocess = require('child_process');
 const proxyWorkerFile = path.join(__dirname, './lib/proxy_worker.js');
 
@@ -14,7 +13,7 @@ module.exports = app => {
   let proxyWorker;
 
   function forkProxyWorker(debugPort) {
-    logger.info(`[egg:proxyworker] proxyPort is ${proxyPort} and debugPort is ${debugPort}`);
+    logger.info(`[egg:proxyworker] ProxyPort is ${proxyPort} and debugPort is ${debugPort}`);
     proxyWorker = childprocess.spawn('node', [ proxyWorkerFile, JSON.stringify({ proxyPort, debugPort }) ], {
       stdio: [ 'pipe', 'pipe', 'pipe', 'ipc' ],
       env: {},
@@ -23,11 +22,12 @@ module.exports = app => {
 
   app.messenger.on('conn-proxy-worker', data => {
     if (proxyWorker) {
-      logger.info('[egg:proxyworker] kill agent worker with signal SIGTERM');
-      proxyWorker.send({ command: 'reconn', data });
-      return;
+      logger.info('[egg:proxyworker] Kill proxy worker with signal SIGTERM');
+      proxyWorker.kill('SIGTERM');
     }
 
-    forkProxyWorker(data.debugPort);
+    setTimeout(() => {
+      forkProxyWorker(data.debugPort);
+    }, 200);
   });
 };

@@ -26,10 +26,26 @@ exports.proxyworker = {
 ```
 
 ```js
+// you can use a specify proxy port.
 // config/config.default.js
 exports.proxyworker = {
   port: 10086,
 };
+```
+
+```javascript
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach Worker",
+      "type": "node",
+      "request": "attach",
+      "restart": true, // Important
+      "port": 10086 // Your debug port
+    }
+  ],
+}
 ```
 
 ## Questions & Suggestions
