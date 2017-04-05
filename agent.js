@@ -1,8 +1,8 @@
 'use strict';
 
 const path = require('path');
-const childprocess = require('child_process');
-const proxyWorkerFile = path.join(__dirname, './lib/proxy_worker.js');
+const { forkNode } = require('./lib/utils/helper');
+const proxyWorkerFile = path.join(__dirname, './', 'lib', 'proxy_worker.js');
 
 module.exports = app => {
   const logger = app.logger;
@@ -13,10 +13,13 @@ module.exports = app => {
   let proxyWorker;
 
   function forkProxyWorker(debugPort) {
+    const args = { proxyPort, debugPort };
+    if (config.ssl) {
+      args.ssl = config.ssl;
+    }
     logger.info(`[egg:proxyworker] ProxyPort is ${proxyPort} and debugPort is ${debugPort}`);
-    proxyWorker = childprocess.spawn('node', [ proxyWorkerFile, JSON.stringify({ proxyPort, debugPort }) ], {
-      stdio: [ 'pipe', 'pipe', 'pipe', 'ipc' ],
-      env: {},
+    proxyWorker = forkNode(proxyWorkerFile, [ JSON.stringify(args) ], {
+      execArgv: [],
     });
   }
 
@@ -26,8 +29,6 @@ module.exports = app => {
       proxyWorker.kill('SIGTERM');
     }
 
-    setTimeout(() => {
-      forkProxyWorker(data.debugPort);
-    }, 200);
+    forkProxyWorker(data.debugPort);
   });
 };
