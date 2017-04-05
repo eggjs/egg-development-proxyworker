@@ -14,9 +14,6 @@
     "egg-plugin",
     "egg-proxyworker"
   ],
-  "dependencies": {
-    "egg-logger": "^1.5.0"
-  },
   "devDependencies": {
     "autod": "^2.7.1",
     "egg": "^0.7.0",
