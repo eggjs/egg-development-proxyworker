@@ -32,9 +32,10 @@
   "scripts": {
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",
+    "clean": "rimraf coverage",
     "cov": "egg-bin cov",
     "lint": "eslint .",
-    "ci": "npm run lint && npm run cov",
+    "ci": "npm run clean && npm run lint && npm run cov",
     "autod": "autod"
   },
   "files": [

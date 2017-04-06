@@ -5,7 +5,7 @@ module.exports = app => {
   const debugPort = process.debugPort;
 
   if (debugPort) {
-    logger.info(`[egg:proxyworker] Send debugPort ${debugPort} to agent worker`);
+    logger.info(`[proxyworker] Send debugPort ${debugPort} to agent worker`);
     app.messenger.sendToAgent('conn-proxy-worker', {
       debugPort,
     });
