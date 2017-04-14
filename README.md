@@ -49,6 +49,12 @@ exports.proxyworker = {
 }
 ```
 
+## Start debugging
+
+```bash
+$ npm run dev -- --debug
+```
+
 ## Questions & Suggestions
 
 Please open an issue [here](https://github.com/okoala/egg-development-proxyworker/issues).
