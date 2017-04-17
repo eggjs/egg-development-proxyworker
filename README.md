@@ -36,24 +36,51 @@ exports.proxyworker = {
 ```javascript
 // .vscode/launch.json
 {
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    {
+      "name": "Launch Egg",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "windows": {
+        "runtimeExecutable": "npm.cmd"
+      },
+      "runtimeArgs": [
+        "run", "dev", "--", "--debug"
+      ],
+      "port": 5858
+    },
+    {
+      "name": "Attach Agent",
+      "type": "node",
+      "request": "attach",
+      "port": 5856
+    },
     {
       "name": "Attach Worker",
       "type": "node",
       "request": "attach",
-      "restart": true, // Important
-      "port": 10086 // Your debug port
+      "restart": true,
+      "port": 10086
     }
   ],
+  "compounds": [
+    {
+      "name": "Debug Egg",
+      "configurations": ["Launch Egg", "Attach Agent", "Attach Worker"]
+    }
+  ]
 }
 ```
 
 ## Start debugging
 
-```bash
-$ npm run dev -- --debug
-```
+In vscode, switch to debugger tab and select ```Debug Egg``` run
 
 ## Questions & Suggestions
 
