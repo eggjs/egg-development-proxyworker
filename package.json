@@ -51,9 +51,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/okoala/egg-development-proxyworker.git"
+    "url": "git+https://github.com/eggjs/egg-development-proxyworker.git"
   },
-  "homepage": "https://github.com/okoala/egg-development-proxyworker#readme",
+  "homepage": "https://github.com/eggjs/egg-development-proxyworker#readme",
   "author": "okoala <dapixp@gmail.com>",
   "license": "MIT"
 }
