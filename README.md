@@ -85,7 +85,7 @@ The new protocol has three major advantages:
 2. Support ES6 Proxy
 3. Support Source Map better
 
-For Node.js Version > = 6.3 (Windows:> = 6.9) we should use [Inspector Protocol] for debugging.
+For and **only** for Node.js >= 7.x we should use [Inspector Protocol] for debugging.
 
 In the above debug configuration, you need to modify some parameters to open the new protocol:
 - `Launch Egg` adjust the parameter `"runtimeArgs": ["run", "debug"]`
