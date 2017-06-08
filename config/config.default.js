@@ -7,4 +7,5 @@
  */
 exports.proxyworker = {
   port: 10086,
+  wsPort: 10087,
 };

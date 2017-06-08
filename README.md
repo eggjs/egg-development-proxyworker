@@ -91,6 +91,11 @@ In the above debug configuration, you need to modify some parameters to open the
 - `Launch Egg` adjust the parameter `"runtimeArgs": ["run", "debug"]`
 - `Attach Worker` add the parameter `"protocol": "inspector"`
 
+In addition, if you use the new protocol can also use chrome devtools for debugging, debugging address:
+```
+chrome-devtools://devtools/bundled/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:10087
+```
+
 
 ##### 4. Start debugging
 
