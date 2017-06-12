@@ -26,16 +26,15 @@ describe('test/proxyworker.test.js', () => {
         after(mm.restore);
 
         it('should debug protocol success', function* () {
-          yield sleep(10000);
+          yield sleep(20000);
           app.expect('stdout', /debugger listen at 10086/);
         });
 
         it('should debug protocol connect success', function* () {
-          app.debug();
           const socket = new net.createConnection({ port: 10086, host: '127.0.0.1' });
-          yield sleep(2000);
+          yield sleep(10000);
           socket.destroy();
-          yield sleep(2000);
+          yield sleep(10000);
           app.expect('stdout', /debugger socket closed/);
         });
       });
@@ -57,7 +56,7 @@ describe('test/proxyworker.test.js', () => {
         afterEach(() => app.close());
 
         it('should inspector protocol success', function* () {
-          yield sleep(10000);
+          yield sleep(20000);
           app.expect('stdout', /\[ws\] debugger listen at 10087/);
           app.expect('stdout', /\[ws\] chrome-devtools:\/\/devtools\/bundled\/inspector.html\?experiments=true&v8only=true&ws=127.0.0.1:10087/);
         });
@@ -81,7 +80,7 @@ describe('test/proxyworker.test.js', () => {
           },
         });
         yield app.ready();
-        yield sleep(10000);
+        yield sleep(20000);
         app.expect('stdout', /debugger listen at 10088/);
         app.expect('stdout', /\[ws\] debugger listen at 10089/);
       });
