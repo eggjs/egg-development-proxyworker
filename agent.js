@@ -19,7 +19,9 @@ module.exports = app => {
       args.ssl = config.ssl;
     }
     logger.info('[egg-development-proxyworker] debugger attached');
-    logger.info(`[egg-development-proxyworker] debugger debugPort is ${debugPort} and proxyPort is ${proxyPort}`);
+    logger.info(`[egg-development-proxyworker] debugger debugPort is ${debugPort}`);
+    logger.info(`[egg-development-proxyworker] debugger proxyPort is ${proxyPort}`);
+    logger.info(`[egg-development-proxyworker] debugger wsProxyPort is ${wsProxyPort}`);
     proxyWorker = forkNode(proxyWorkerFile, [ JSON.stringify(args) ], {
       execArgv: [],
     });
