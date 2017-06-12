@@ -23,7 +23,7 @@ describe('test/proxyworker.test.js', () => {
       after(mm.restore);
 
       it('should debug protocol success', function* () {
-        yield sleep(3000);
+        yield sleep(10000);
         app.expect('stdout', /debugger listen at 10086/);
       });
 
@@ -52,7 +52,7 @@ describe('test/proxyworker.test.js', () => {
       afterEach(() => app.close());
 
       it('should inspector protocol success', function* () {
-        yield sleep(5000);
+        yield sleep(10000);
         app.expect('stdout', /\[ws\] debugger listen at 10087/);
         app.expect('stdout', /\[ws\] chrome-devtools:\/\/devtools\/bundled\/inspector.html\?experiments=true&v8only=true&ws=127.0.0.1:10087/);
       });
@@ -75,7 +75,7 @@ describe('test/proxyworker.test.js', () => {
         },
       });
       yield app.ready();
-      yield sleep(5000);
+      yield sleep(10000);
       app.expect('stdout', /debugger listen at 10088/);
       app.expect('stdout', /\[ws\] debugger listen at 10089/);
     });
