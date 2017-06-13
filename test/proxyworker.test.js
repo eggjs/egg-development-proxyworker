@@ -1,81 +1,89 @@
 'use strict';
 
 const mm = require('egg-mock');
-const fs = require('fs');
-const path = require('path');
+const net = require('net');
 const sleep = require('ko-sleep');
-const assert = require('assert');
+const semver = require('semver');
 
-describe('test/development.test.js', () => {
+describe('test/proxyworker.test.js', () => {
+  describe('default config', () => {
+    // node version < 8.0.0
+    if (semver.lt(process.version, '8.0.0')) {
+      describe('debug protocol', () => {
+        let app;
 
-  describe('EGG_DEBUG = ""', function() {
-    let app;
-    before(() => {
-      mm.env('local');
-      app = mm.cluster({
-        baseDir: 'development',
+        before(() => {
+          mm(process.env, 'NODE_ENV', 'development');
+          app = mm.cluster({
+            baseDir: 'app',
+            opt: {
+              execArgv: [ '--debug' ],
+            },
+          });
+          return app.ready();
+        });
+        after(() => app.close());
+        after(mm.restore);
+
+        it('should debug protocol success', function* () {
+          yield sleep(20000);
+          app.expect('stdout', /debugger listen at 10086/);
+        });
+
+        it('should debug protocol connect success', function* () {
+          const socket = new net.createConnection({ port: 10086, host: '127.0.0.1' });
+          yield sleep(10000);
+          socket.destroy();
+          yield sleep(10000);
+          app.expect('stdout', /debugger socket closed/);
+        });
       });
-      return app.ready();
-    });
-    after(() => app.close());
+    }
 
-    it('should reload when change service', function* () {
-      const filepath = path.join(__dirname, 'fixtures/development/app/service/a.js');
-      fs.writeFileSync(filepath, '');
-      yield sleep(1000);
+    if (semver.gt(process.version, '7.0.0')) {
+      describe('inspector protocal', () => {
+        let app;
 
-      fs.unlinkSync(filepath);
-      app.expect('stdout', new RegExp(`reload worker because ${filepath}`));
-    });
+        before(() => {
+          mm(process.env, 'NODE_ENV', 'development');
+          app = mm.cluster({
+            baseDir: 'app', opt: {
+              execArgv: [ '--inspect' ],
+            },
+          });
+          return app.ready();
+        });
+        afterEach(() => app.close());
 
-    it('should not reload when change assets', function* () {
-      const filepath = path.join(__dirname, 'fixtures/development/app/assets/b.js');
-      fs.writeFileSync(filepath, '');
-      yield sleep(1000);
-
-      fs.unlinkSync(filepath);
-      app.notExpect('stdout', new RegExp(`reload worker because ${filepath}`));
-    });
-
-    it('should reload once when 2 file change', function* () {
-      const filepath = path.join(__dirname, 'fixtures/development/app/service/c.js');
-      const filepath1 = path.join(__dirname, 'fixtures/development/app/service/d.js');
-      fs.writeFileSync(filepath, '');
-      // set a timeout for watcher's interval
-      yield sleep(1000);
-      fs.writeFileSync(filepath1, '');
-
-      yield sleep(2000);
-      fs.unlinkSync(filepath);
-      fs.unlinkSync(filepath1);
-
-      assert(count(app.stdout, 'reload worker'), 2);
-    });
+        it('should inspector protocol success', function* () {
+          yield sleep(20000);
+          app.expect('stdout', /\[ws\] debugger listen at 10087/);
+          app.expect('stdout', /\[ws\] chrome-devtools:\/\/devtools\/bundled\/inspector.html\?experiments=true&v8only=true&ws=127.0.0.1:10087/);
+        });
+      });
+    }
   });
 
-  describe('EGG_DEBUG = true', function() {
+  describe('custom debug port', () => {
     let app;
-    before(() => {
-      mm(process.env, 'EGG_DEBUG', 'true');
-      mm.env('local');
-      app = mm.cluster({
-        baseDir: 'development',
+
+    beforeEach(() => {
+      mm(process.env, 'NODE_ENV', 'development');
+    });
+    afterEach(() => app.close());
+
+    if (semver.gt(process.version, '7.0.0')) {
+      it('should success', function* () {
+        app = mm.cluster({
+          baseDir: 'custom-debug-port', opt: {
+            execArgv: [ '--inspect' ],
+          },
+        });
+        yield app.ready();
+        yield sleep(20000);
+        app.expect('stdout', /debugger listen at 10088/);
+        app.expect('stdout', /\[ws\] debugger listen at 10089/);
       });
-      return app.ready();
-    });
-    after(() => app.close());
-
-    it('should reload', function* () {
-      const filepath = path.join(__dirname, 'fixtures/development/app/service/a.js');
-      fs.writeFileSync(filepath, '');
-      yield sleep(1000);
-
-      fs.unlinkSync(filepath);
-      app.notExpect('stdout', new RegExp(`reload worker because ${filepath} change`));
-    });
+    }
   });
 });
-
-function count(str, match) {
-  return str.match(new RegExp(match, 'g'));
-}
