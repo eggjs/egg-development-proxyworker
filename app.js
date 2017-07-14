@@ -8,7 +8,7 @@ module.exports = app => {
     logger.info('[egg-development-proxyworker] client worker ready to connect proxyworker.');
     app.messenger.sendToAgent('conn-proxy-worker', {
       debugPort,
-      isInpectProtocol: Array.isArray(process.execArgv) && process.execArgv.some(v => /--inspect(-brk)?=/.test(v)),
+      isInpectProtocol: Array.isArray(process.execArgv) && process.execArgv.some(v => /--inspect(\-|\=|$)/.test(v)),
     });
   }
 };
