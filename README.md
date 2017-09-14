@@ -22,6 +22,8 @@
 
 A proxy worker for debugging worker on egg
 
+**DEPRECATED, use [egg-bin debug](https://github.com/eggjs/egg-bin#debug) instead.**
+
 As in development stage, when we modify the code and save, the application will automatically restart the worker. But every time the worker's updates make the debug port change, And [VSCode] is required to attach to a fixed debug port. So we enabled a proxy service called `proxyworker`. Worker debugging information will be proxied to this service. And then [VSCode] through the fixed attach to proxyworker to debug the worker
 
 The following are the installation steps:

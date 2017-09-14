@@ -36,4 +36,10 @@ module.exports = app => {
 
     forkProxyWorker(data);
   });
+
+  app.messenger.on('egg-ready', () => {
+    setTimeout(() => {
+      logger.warn('egg-development-proxyworker is DEPRECATED, use [egg-bin debug](https://github.com/eggjs/egg-bin#debug) instead.');
+    }, 1000);
+  });
 };

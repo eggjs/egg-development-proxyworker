@@ -43,7 +43,8 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run clean && npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "postinstall": "echo 'egg-development-proxyworker is DEPRECATED, use [egg-bin debug](https://github.com/eggjs/egg-bin#debug) instead.'"
   },
   "files": [
     "index.js",
