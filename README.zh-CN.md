@@ -22,6 +22,8 @@
 
 A proxy worker for debugging worker on egg
 
+**该插件已经不再需要使用, [egg-bin debug](https://github.com/eggjs/egg-bin#debug) 已内置代理功能，具体参见[文档](https://eggjs.org/zh-cn/core/development.html#使用-egg-bin-调试)**
+
 由于在开发阶段，当我们修改代码并保存后，应用会自动重启 worker。但是每次 worker 的更新都会使得调试端口发生变化，而 [VSCode] 是需要 attach 到固定的调试端口的。于是我们启用了一个叫 `proxyworker` 的代理服务，worker 的调试信息会被代理到这个服务上。这样 [VSCode] 通过固定 attach 到 proxyworker 来调试 worker 了。
 
 下面是安装使用步骤:
